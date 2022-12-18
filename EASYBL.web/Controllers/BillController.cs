@@ -194,16 +194,7 @@ namespace EASYBL.web.Controllers
         {
             try
             {
-                var a = User.Identity.Name;
-                var Id = Int32.Parse(a);
-                if (string.IsNullOrEmpty(a))
-                {
-                    return RedirectToAction("Login", "Account");
-                }
-               
-                var BillData = billService.FilterData(dateTime, name,billNo,Id).ToList();
-
-                return View(BillData);
+                return View();
             }
             catch (Exception ex)
             {

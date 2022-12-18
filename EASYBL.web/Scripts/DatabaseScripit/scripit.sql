@@ -33,5 +33,12 @@ CurrentBillNo int,
 GstNo varchar(Max)
 )
 
+create table Inventory(
+Id int primary key identity(1,1),
+UserId int ,
+[Name] varchar(max),
+Price decimal,
+)
+
 
 */

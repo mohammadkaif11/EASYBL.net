@@ -1,4 +1,5 @@
 using EASYBL.bussiness.BillService;
+using EASYBL.bussiness.InventoryService;
 using EASYBL.bussiness.UserService;
 using EASYBL.data.IReposistoryBase;
 using EASYBL.data.ReposistoryBase;
@@ -17,6 +18,8 @@ namespace EASYBL.web
             
             container.RegisterType<IBillService, BillService>();
             container.RegisterType<IUserService, UserService>();
+            container.RegisterType<IInventoryService, InventoryService>();
+            container.RegisterType<IReposistoryBase<Inventory>, ReposistoryBase<Inventory>>();
             container.RegisterType<IReposistoryBase<Items>, ReposistoryBase<Items>>();
             container.RegisterType< IReposistoryBase<Bills>, ReposistoryBase<Bills>>();
             container.RegisterType<IReposistoryBase<ShopkeeperUsers>, ReposistoryBase<ShopkeeperUsers>>();

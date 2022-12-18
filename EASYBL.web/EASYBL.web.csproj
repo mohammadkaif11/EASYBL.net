@@ -283,6 +283,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BillController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -339,6 +340,11 @@
     <Content Include="Views\Bill\Data.cshtml" />
     <Content Include="Views\Bill\BillGetById.cshtml" />
     <Content Include="Views\Bill\Filter.cshtml" />
+    <Content Include="Views\Inventory\Index.cshtml" />
+    <Content Include="Views\Inventory\Create.cshtml" />
+    <Content Include="Views\Inventory\Delete.cshtml" />
+    <Content Include="Views\Inventory\Edit.cshtml" />
+    <Content Include="Views\Inventory\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

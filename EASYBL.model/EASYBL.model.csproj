@@ -105,6 +105,7 @@
     <Compile Include="Helpers\CreatePageHelper.cs" />
     <Compile Include="Helpers\UpdateBillHelper.cs" />
     <Compile Include="Model\Bills.cs" />
+    <Compile Include="Model\Inventory.cs" />
     <Compile Include="Model\Items.cs" />
     <Compile Include="Model\ShopkeeperUsers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
