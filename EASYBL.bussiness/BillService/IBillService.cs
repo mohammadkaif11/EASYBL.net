@@ -18,6 +18,11 @@ namespace EASYBL.bussiness.BillService
 
         BillResponseDto GetBillsByBillNo(int BillId, int UserId);
 
-        BillResponseDto UpdateBills(BillResponseDto billResponseDto);
+        BillResponseDto UpdateBills(BillResponseDto billResponseDto,int UserId);
+
+        void DeleteBill(int BillNo,int UserId);
+
+        IQueryable<BillResponseDto> FilterData(DateTime dateTime,string name,int billNo,int userId);
+
     }
 }

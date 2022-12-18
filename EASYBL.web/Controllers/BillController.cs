@@ -25,7 +25,6 @@ namespace EASYBL.web.Controllers
 
         public ActionResult Index()
         {
-
             try
             {
                 var a =  User.Identity.Name;
@@ -68,7 +67,7 @@ namespace EASYBL.web.Controllers
 
                 if (BillObjectDto.CustomerName == null || BillObjectDto.CustomerPhoneNumber == null || BillObjectDto.RecivedDate == null || BillObjectDto.DeliveryDate == null)
                 {
-                    return Json("Number Date are Required Field", JsonRequestBehavior.AllowGet);
+                    return Json("Phone number and name are Required Field", JsonRequestBehavior.AllowGet);
                 }
                 else if (ListObjectDto.Count <= 0)
                 {
@@ -82,7 +81,6 @@ namespace EASYBL.web.Controllers
                         return Json("Add non empty items ", JsonRequestBehavior.AllowGet);
                     }
                 }
-                BillObjectDto.DeliveryDate = DateTime.Now;
                 billService.CreateBill(BillObjectDto, ListObjectDto, Id);
 
                 return Json("Entry Added SuccessFully", JsonRequestBehavior.AllowGet);
@@ -99,11 +97,17 @@ namespace EASYBL.web.Controllers
         {
             try
             {
+
                 var a = User.Identity.Name;
                 var Id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
                     return RedirectToAction("Login", "Account");
+                }
+
+                if(page==0 || page == null)
+                {
+                    page = 1;
                 }
 
                 var BillData= billService.GetBills(Id, page).ToList();
@@ -116,32 +120,8 @@ namespace EASYBL.web.Controllers
             }
 
         }
-
-        [HttpPost]
-        public ActionResult Data(DateTime date,int billno,string name)
-        {
-
-            try
-            {
-
-                var a = User.Identity.Name;
-                var Id = Int32.Parse(a);
-                if (string.IsNullOrEmpty(a))
-                {
-                    return RedirectToAction("Login", "Account");
-                }
-
-                var BillData = billService.GetBills(Id, 1).ToList();
-
-                return View(BillData);
-            }
-            catch (Exception ex)
-            {
-                return View();
-            }
-        }
-
-        //BillNo
+            
+        //BillNo Get By id
         [Route("getById/{id}")]
         public ActionResult BillGetById(int id)
         {
@@ -173,10 +153,10 @@ namespace EASYBL.web.Controllers
                 var Id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("BillGetById", "Bill",billResponseDto.BillObject.Id);
+                    return RedirectToRoute(new { action = "BillGetById", controller = "Bill", id = 1 });
                 }
-
-                return RedirectToAction("BillGetById", "Bill", billResponseDto.BillObject.Id);
+                var billObjectResponse = billService.UpdateBills(billResponseDto, Id);
+                return RedirectToRoute(new { action = "BillGetById", controller = "Bill", id = 1 });
             }
             catch (Exception ex)
             {
@@ -186,6 +166,7 @@ namespace EASYBL.web.Controllers
 
         }
 
+        //Bill Delete ById
         [Route("Delete/{id}")]
         public ActionResult Delete(int id)
         {
@@ -197,8 +178,30 @@ namespace EASYBL.web.Controllers
                 {
                     return RedirectToAction("Login", "Account");
                 }
+                billService.DeleteBill(id, User_id);
 
-                var BillData = billService.GetBillsByBillNo(id, User_id);
+                return RedirectToRoute(new { action = "Data", controller = "Bill", page = 1 });
+            }
+            catch (Exception ex)
+            {
+                return View();
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult Filter(DateTime dateTime,string name,int billNo)
+        {
+            try
+            {
+                var a = User.Identity.Name;
+                var Id = Int32.Parse(a);
+                if (string.IsNullOrEmpty(a))
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+               
+                var BillData = billService.FilterData(dateTime, name,billNo,Id).ToList();
 
                 return View(BillData);
             }

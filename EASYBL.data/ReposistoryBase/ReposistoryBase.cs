@@ -52,10 +52,11 @@ namespace EASYBL.data.ReposistoryBase
 
         }
 
-        public void Delete(object id)
+        public void Delete(int id)
         {
             T existing = table.Find(id);
             table.Remove(existing);
+            _context.SaveChanges();
         }
 
         public void Save()

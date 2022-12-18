@@ -14,7 +14,7 @@ namespace EASYBL.data.IReposistoryBase
         void Insert(T obj);
         void InsertRange(IEnumerable<T> obj);    
         void Update(T obj);
-        void Delete(object id);
+        void Delete(int id);
         void DeleteRange(IEnumerable<T> obj);    
         IEnumerable<T> FindByCondition(Expression<Func<T, bool>> expression);
 

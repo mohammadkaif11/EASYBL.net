@@ -4,21 +4,17 @@
     ViewBag.Title = "Bill/Index";
     Layout = "~/Views/Shared/_BillCommonLayout.cshtml";
 }
-<div class="container my-2" id="response-div">
+<div class="container" id="response-div">
 </div>
 <div class="d-flex justify-content-center">
     <div class="form_content">
         <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Name</label>
+            <label for="name" class="form-label">Name</label>
             <input type="text" name="name" class="form-control" id="c-name" aria-describedby="nameHelep">
         </div>
         <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">PhoneNumber</label>
+            <label for="phonenumber" class="form-label">PhoneNumber</label>
             <input type="text" class="form-control" id="c-phoneNumber" aria-describedby="emailHelp">
-        </div>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Delivery Date</label>
-            <input type="date" class="form-control" id="c-deliveryDate" aria-describedby="emailHelp">
         </div>
         <button type="submit" class="btn btn-dark my-2" onclick="addCustomerDetails()">Add Customer Details</button>
         <div class="mb-3">
@@ -32,79 +28,72 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Item Name</label>
+            <label for="itemname" class="form-label">Item Name</label>
             <input type="text" class="form-control" id="itemName" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Item Price</label>
+            <label for="itemprice" class="form-label">Item Price</label>
             <input type="text" class="form-control" id="itemPrice">
         </div>
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Item Quantity</label>
+            <label for="itemquantity" class="form-label">Item Quantity</label>
             <input type="text" class="form-control" id="itemQuantity">
         </div>
         <button class="btn btn-dark my-2" onclick="addItem()">Add Item</button>
     </div>
     <div class="bill_content">
         <div class="bill_content_inner">
-            <div class="bill_header d-flex justify-content-between">
-                <div class="bill_header_1" style="text-align:left">
-                    <h1 style="font-size:30px;font-weight:bold">@Model.Name</h1>
-                    <h2 style="font-size:25px;font-weight:bold">@Model.Address</h2>
-                    <h3 style="font-size:20px;font-weight:bold">@Model.Number</h3>
-                    <h4 style="font-size:15px;font-weight:bold;color:red;">@Model.billNo</h4>
+            <div id="print_section" class="print_section">
+                <div class="bill_header d-flex justify-content-between">
+                    <div class="bill_header_1" style="text-align:left">
+                        <h1 style="font-size:30px;font-weight:bold">@Model.Name</h1>
+                        <h2 style="font-size:25px;font-weight:bold">@Model.Address</h2>
+                        <h3 style="font-size:20px;font-weight:bold">@Model.Number</h3>
+                        <h4 style="font-size:15px;font-weight:bold;color:red;">@Model.billNo</h4>
+                    </div>
                 </div>
-                <div class="bill_header_2" style="text-align:right;">
-                    <h1 name="CustomerName" id="customerName" style="font-size:25px;font-weight:bold;background-color:black;color:white; padding:3px;border:2px solid white;"></h1>
-                    <h2 name="CustomerPhone" id="customerPhoneNumber" style="font-size: 25px; font-weight: bold; background-color: black; color: white; padding: 3px; border: 2px solid white; "></h2>
-                    <h2 name="DeliveryDate" id="customerDeliveryDate" style="font-size: 25px; font-weight: bold; background-color: black; color: white; padding: 3px; border: 2px solid white; "></h2>
-                    <h2 name="RecivedDate" id="customerRecivedDate" style="font-size: 20px; font-weight: bold; background-color: black; color: white; padding: 3px; border: 2px solid white; "></h2>
+                <div class="bill_header_2" style="text-align:center;">
+                    <h1 name="CustomerName" id="customerName" style="font-size:25px;font-weight:bold; padding:3px;"></h1>
+                    <h2 name="CustomerPhone" id="customerPhoneNumber" style="font-size: 25px; font-weight: bold; padding: 3px;"></h2>
+                    <h2 name="RecivedDate" id="customerRecivedDate" style="font-size: 20px; font-weight: bold; padding: 3px;"></h2>
                 </div>
-            </div>
-            <div class="bill_table">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Sno</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ForDynamic_adding_tr_td">
-                    </tbody>
-                </table>
+                <div class="bill_table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Sno</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ForDynamic_adding_tr_td">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="bill_total_table my-2">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Total Quantity</th>
+                                <th scope="col">Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="totalItem"></td>
+                                <td id="totalPrice"></td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-            </div>
-            <div class="bill_total_table my-2">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Total Quantity</th>
-                            <th scope="col">Total Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td id="totalItem"></td>
-                            <td id="totalPrice"></td>
-                        </tr>
-                    </tbody>
-                </table>
-
+                </div>
             </div>
             <div class="button groups d-flex justify-content-between">
                 <button class="btn btn-dark my-2" id="submitbtn" onclick="SaveItem()">Save</button>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown button
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <button class="btn btn-dark my-2">Print</button>
-                        <button class="btn btn-dark my-2">WhatsApp</button>
-                    </div>
-                </div>
+                <button class="btn btn-dark my-2" onclick="Print()">Print</button>
+                <button class="btn btn-dark my-2 " onclick="BackTomainPage()">Back</button>
             </div>
         </div>
     </div>

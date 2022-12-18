@@ -6,7 +6,6 @@ var total_price = document.getElementById('totalPrice');
 var total_quantity = document.getElementById('totalItem');
 var CustomerName = document.getElementById('customerName');
 var CustomerPhone = document.getElementById('customerPhoneNumber');
-var deliveryDate = document.getElementById('customerDeliveryDate');
 var RecivedDate = document.getElementById('customerRecivedDate');
 
 
@@ -132,25 +131,21 @@ function addCustomerDetails() {
     let today = new Date().toLocaleDateString()
     var name = document.getElementById('c-name');
     var phone = document.getElementById('c-phoneNumber');
-    var delivery_date = document.getElementById('c-deliveryDate');
 
     CustomerName.innerText = name.value;
     CustomerPhone.innerText = phone.value;
-    deliveryDate.innerText = delivery_date.value;
     RecivedDate.innerText = today;
 
 
     name.value = "";
     phone.value = "";
-    delivery_date.value = "";
-
 }
 
 //SaveItem...........
 function SaveItem() {
+    var responsediv = document.getElementById('response-div');
     var Sucmsg = "Entry Save SuccessFully";
     var Errormsg = "Failed";
-    var responsediv = document.getElementById('response-div');
     var Obj = [];
     var table_child = table.children;
     for (var i = 0; i < table_child.length; i++) {
@@ -165,7 +160,6 @@ function SaveItem() {
     var billObjectDto = {
         "customername": CustomerName.innerText,
         "customerPhoneNumber": CustomerPhone.innerText,
-        "deliverydate": deliveryDate.innerText,
         "Reciveddate": RecivedDate.innerText,
     }
     var payload = {
@@ -177,19 +171,44 @@ function SaveItem() {
         url: '/Bill/SendBill',
         data: payload,
         success: function (data) {
-            responsediv.innerHTML = `<div class="alert alert-success" role="alert">
-  ${data}
+            responsediv.innerHTML =
+                `
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Success</strong> ${data}
+  <button type="button" class="close right-0" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
 </div>
- `;
-
+`;
         },
         error: function (error) {
-            responsediv.innerHTML =`< div class="alert alert-danger alert-dismissible fade show" role = "alert" >
-                                  <strong>Error</strong> Some Server Error
-                    < button type = "button" class="btn-close" data - bs - dismiss="alert" aria - label="Close" ></button >
+            responsediv.innerHTML = `
+                      <div class="alert alert-danger alert-dismissible fade show" role = "alert" ><strong>Error</strong> Some server error Occured
+                            < button type = "button" class="btn-close" data - bs - dismiss="alert" aria - label="Close" ></button >
                        </div >`
-
         }
     });
     console.log(payload)
+}
+
+//Print Function
+function Print()
+{
+    var printContent = document.getElementById("print_section");
+    var a = window.open('', '');
+    a.document.write('<html>');
+    a.document.write('<head>')
+    a.document.write('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">');
+    a.document.write('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">');
+    a.document.write('</head>')
+    a.document.write('<body>');
+    a.document.write(printContent.innerHTML);
+    a.document.write('</body></html>');
+
+    a.print();
+}
+
+//Back To Bill Page
+function BackTomainPage() {
+    window.location = "/Bill"
 }

@@ -1,16 +1,16 @@
 ﻿@using EASYBL.model.Helpers;
 @model IEnumerable<EASYBL.model.Helpers.BillResponseDto>
 @{
-    ViewBag.Title = "Bill/Data";
+    ViewBag.Title = "Bill/Filter";
     Layout = "~/Views/Shared/_BillCommonLayout.cshtml";
 }
 @*filterForm*@
 <nav class="navbar bg-light mx-2 my-2">
     <form class="container-fluid  border-5 p-2" action="/Bill/Filter" method="post">
         <div class="input-group">
-            <input type="date" name="datetime" class="form-control mx-1 " placeholder="Date" >
-            <input type="text" name="name" class="form-control mx-1" placeholder="Name" >
-            <input type="number" name="biilNo" class="form-control mx-1" placeholder="BillNo" >
+            <input type="date" name="dateTime" class="form-control mx-1 " placeholder="Date" aria-label="Username" aria-describedby="basic-addon1">
+            <input type="text" name="name" class="form-control mx-1" placeholder="Name" aria-label="Username" aria-describedby="basic-addon1">
+            <input type="number" name="biilNo" class="form-control mx-1" placeholder="BillNo" aria-label="Username" aria-describedby="basic-addon1">
             <button class="btn btn-dark mx-1">Submit</button>
         </div>
     </form>
@@ -70,4 +70,3 @@
         </ul>
     </nav>
 </div>
-
