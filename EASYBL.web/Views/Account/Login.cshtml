@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Account/Login";
+}
+<div class="home_container">
+    <div class="content_1">
+        <div class="Login_form">
+            <form action="/Account/Login" method="post">
+                <div class="mb-3" style="list-style:none;color:red;">
+                    @Html.ValidationSummary()
+                </div>
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Email address</label>
+                    <input type="email" name="Email" class="form-control" id="email" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <label for="Password" class="form-label">Password</label>
+                    <input type="password" name="Password" class="form-control" id="password">
+                </div>
+                <div class="mb-3">
+                    <label for="ConfirmPassowrd" class="form-label">Confirm Password</label>
+                    <input type="password" name="ConfirmPassword" class="form-control" id="confirmpassword">
+                </div>
+                <button type="submit" class="btn btn-dark">Login</button>
+                <a href="#" class="list-group-item list-group-item-action">ForgetPassword?</a>
+            </form>
+        </div>
+    </div>
+    <div class="content_2">
+        <img src="~/Content/images/simple-line-art-illustration-of-businessman-getting-stress-at-work-2BDYT4H.jpg" />
+    </div>
+</div>
+

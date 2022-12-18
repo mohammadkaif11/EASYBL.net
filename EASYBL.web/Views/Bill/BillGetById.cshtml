@@ -1,0 +1,87 @@
+﻿@using EASYBL.model.Helpers;
+@model EASYBL.model.Helpers.BillResponseDto
+@{
+    ViewBag.Title = "Bill/BillGetById";
+}
+<div class="container">
+    <div class="p-2" style="border:2px solid grey">
+        <h1 class="text-center display-5">Bill No is <strong>@Model.BillObject.BillNo</strong> and Name <strong>@Model.BillObject.CustomerName</strong></h1>
+        <div style="text-align:center">
+            <form action="/Bill/UpdateBill" method="post">
+                <div class="my-3 mx-3">
+                    <div style="text-align:right;">
+                        @Html.HiddenFor(x => Model.BillObject.Id);
+                        <h1 style="font-size:30px;font-weight:bold">
+                            Name:@Html.TextBoxFor(x => Model.BillObject.CustomerName, new { value = Model.BillObject.CustomerName })
+                        </h1>
+                        <h2 style="font-size:25px;font-weight:bold">
+                            PhoneNumber:@Html.TextBoxFor(x => Model.BillObject.CustomerPhoneNumber, new { value = Model.BillObject.CustomerPhoneNumber })
+                        </h2>
+                        <h3 style="font-size:20px;font-weight:bold">
+                            Date:@Html.TextBoxFor(x => Model.BillObject.RecivedDate, new { value = Model.BillObject.DeliveryDate })
+                        </h3>
+                        @Html.HiddenFor(x => Model.BillObject.BillNo);
+                        <h3 style="font-size:20px;font-weight:bold; color:red">
+                            BillNo:@Model.BillObject.BillNo
+                        </h3>
+                    </div>
+                </div>
+                <div class="bill_item_table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Bill No</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>S
+                            @for (int i = 0; i < Model.ItemObject.Count; i++)
+                            {
+                                <tr>
+                                    <th scope="row">@Model.ItemObject[i].BillNo</th>
+                                    <td>@Html.TextBoxFor(x => Model.ItemObject[i].ItemName, new { value = Model.ItemObject[i].ItemName })</td>
+                                    <td>@Html.TextBoxFor(x => Model.ItemObject[i].ItemQuantity, new { value = Model.ItemObject[i].ItemQuantity })</td>
+                                    <td>@Html.TextBoxFor(x => Model.ItemObject[i].ItemPrice, new { value = Model.ItemObject[i].ItemPrice })</td>
+                                    <td>@Html.HiddenFor(x => Model.ItemObject[i].Id, new { value = Model.ItemObject[i].Id })</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="my-2">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Total Quantity</th>
+                                <th scope="col">Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="totalItem">@Model.BillObject.TotalQuantity</td>
+                                <td id="totalPrice">@Model.BillObject.Amount</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="button groups d-flex justify-content-between">
+                    <button class="btn btn-dark my-2" id="submitbtn" onclick="SaveItem()">Save</button>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown button
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <button class="btn btn-dark my-2">Print</button>
+                            <button class="btn btn-dark my-2">WhatsApp</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
