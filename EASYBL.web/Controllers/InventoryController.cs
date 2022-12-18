@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace EASYBL.web.Controllers
 {
+    [Authorize]
     public class InventoryController : Controller
     {
         private readonly IInventoryService inventoryService;
@@ -70,8 +71,7 @@ namespace EASYBL.web.Controllers
                 {
                     return RedirectToAction("Login", "Account");
                 }
-                var inventoryList = inventoryService.Get(Id);
-                return View(inventoryList);
+                return View();
 
             }
             catch (Exception ex)

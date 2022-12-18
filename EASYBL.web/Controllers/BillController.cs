@@ -1,4 +1,5 @@
 ﻿using EASYBL.bussiness.BillService;
+using EASYBL.bussiness.InventoryService;
 using EASYBL.bussiness.UserService;
 using EASYBL.model.Helpers;
 using EASYBL.model.Model;
@@ -17,10 +18,12 @@ namespace EASYBL.web.Controllers
     {
         private readonly IBillService billService;
         private readonly IUserService userService;
-        public BillController(IBillService billService, IUserService userService)
+        private readonly IInventoryService inventoryService;
+        public BillController(IInventoryService inventoryService,IBillService billService, IUserService userService)
         {
             this.billService = billService;
             this.userService = userService;
+            this.inventoryService = inventoryService;   
         }
 
         public ActionResult Index()
@@ -34,6 +37,7 @@ namespace EASYBL.web.Controllers
                     return RedirectToAction("Login", "Account");
                 }
                 var User_data = userService.GetById(Id);
+                var inventoryItem = inventoryService.Get(Id);
                 if (User_data != null)
                 {
                     CreatePageHelper createPageHelper = new CreatePageHelper()
@@ -43,6 +47,7 @@ namespace EASYBL.web.Controllers
                         billNo=User_data.CurrentBillNo,
                         Number=User_data.Number,    
                     };
+                    ViewBag.data = inventoryItem;
                     return View(createPageHelper);
                 }
                 return View();

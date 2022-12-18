@@ -19,12 +19,12 @@
         <button type="submit" class="btn btn-dark my-2" onclick="addCustomerDetails()">Add Customer Details</button>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Select Item</label>
-            <select class="class=" form-select" aria-label="Default select example" " onchange="myFunction(event)">
+            <select class="class=" form-select" aria-label="Default select example" onchange="myFunction(event)">
                 <option disabled selected>Choose Database Type</option>
-                <option value="Green 20">green</option>
-                <option value="Red 10">red</option>
-                <option value="Orange 10">orange</option>
-                <option value="Black 10">black</option>
+                @foreach (var item in ViewBag.data)
+                {
+                    <option value="@item.Name @item.Price">@item.Name</option>
+                }
             </select>
         </div>
         <div class="mb-3">

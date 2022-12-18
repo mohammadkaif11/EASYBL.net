@@ -21,12 +21,10 @@ namespace EASYBL.web
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
-            bundles.Add(new ScriptBundle("~/bundles/Js").Include("~/Scripts/Js/CreateBill.js", "~/Scripts/Js/data.js", "~/Scripts/Js/main.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/Account.css", "~/Content/CreateBill.css"));
         }
     }
 }

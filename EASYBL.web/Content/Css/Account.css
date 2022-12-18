@@ -1,7 +1,14 @@
 ﻿.home_container {
     display: flex;
 }
-
+.link_design {
+    text-decoration:none;
+    color:black;
+}
+.link_designb{
+    text-decoration: none;
+    color: white;
+}
 .content_1 {
     width: 50%;
 }
@@ -65,13 +72,13 @@
     height: 100%;
 }
 
-    .content_2 img {
+.content_2 img {
         margin-left: 15px;
         margin-right: 15px;
         width: 85%;
         height: 100%;
         object-fit: fill;
-    }
+}
 
 footer {
     background-color: #f8f9fa;
@@ -79,11 +86,11 @@ footer {
     padding: 10px;
 }
 
-    footer ul {
+footer ul {
         margin-right: 30%
-    }
+}
 
-        footer ul li {
+footer ul li {
             list-style: none;
             color: black;
-        }
+}
