@@ -103,6 +103,7 @@
   <ItemGroup>
     <Compile Include="Helpers\BillResponseDto.cs" />
     <Compile Include="Helpers\CreatePageHelper.cs" />
+    <Compile Include="Helpers\FilterObject.cs" />
     <Compile Include="Helpers\UpdateBillHelper.cs" />
     <Compile Include="Model\Bills.cs" />
     <Compile Include="Model\Inventory.cs" />

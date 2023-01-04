@@ -3,6 +3,7 @@ using EASYBL.bussiness.InventoryService;
 using EASYBL.bussiness.UserService;
 using EASYBL.model.Helpers;
 using EASYBL.model.Model;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,22 +20,22 @@ namespace EASYBL.web.Controllers
         private readonly IBillService billService;
         private readonly IUserService userService;
         private readonly IInventoryService inventoryService;
-        public BillController(IInventoryService inventoryService,IBillService billService, IUserService userService)
+        public BillController(IInventoryService inventoryService, IBillService billService, IUserService userService)
         {
             this.billService = billService;
             this.userService = userService;
-            this.inventoryService = inventoryService;   
+            this.inventoryService = inventoryService;
         }
 
         public ActionResult Index()
         {
             try
             {
-                var a =  User.Identity.Name;
-                var Id= Int32.Parse(a);
+                var a = User.Identity.Name;
+                var Id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ErrorPage", "Error");
                 }
                 var User_data = userService.GetById(Id);
                 var inventoryItem = inventoryService.Get(Id);
@@ -42,10 +43,10 @@ namespace EASYBL.web.Controllers
                 {
                     CreatePageHelper createPageHelper = new CreatePageHelper()
                     {
-                        Name= User_data.Name,   
-                        Address= User_data.Address, 
-                        billNo=User_data.CurrentBillNo,
-                        Number=User_data.Number,    
+                        Name = User_data.Name,
+                        Address = User_data.Address,
+                        billNo = User_data.CurrentBillNo,
+                        Number = User_data.Number,
                     };
                     ViewBag.data = inventoryItem;
                     return View(createPageHelper);
@@ -54,7 +55,7 @@ namespace EASYBL.web.Controllers
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ErrorPage", "Error");
             }
         }
 
@@ -74,7 +75,7 @@ namespace EASYBL.web.Controllers
                 {
                     return Json("Phone number and name are Required Field", JsonRequestBehavior.AllowGet);
                 }
-                else if (ListObjectDto.Count <= 0)
+                else if (ListObjectDto == null)
                 {
                     return Json("Add atleast one item", JsonRequestBehavior.AllowGet);
 
@@ -107,48 +108,57 @@ namespace EASYBL.web.Controllers
                 var Id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ErrorPage", "Error");
                 }
 
-                if(page==0 || page == null)
+                if (page == 0 || page == null)
                 {
                     page = 1;
                 }
 
-                var BillData= billService.GetBills(Id, page).ToList();
+                var BillData = billService.GetBills(Id, page).ToList();
+                if (BillData == null)
+                {
+                    return RedirectToAction("Index", "Main");
+
+                }
 
                 return View(BillData);
             }
             catch (Exception ex)
             {
-                return View();
+                return RedirectToAction("ErrorPage", "Error");
             }
 
         }
-            
+
         //BillNo Get By id
         [Route("getById/{id}")]
         public ActionResult BillGetById(int id)
         {
-           try
+            try
             {
                 var a = User.Identity.Name;
                 var User_id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ErrorPage", "Error");
                 }
 
                 var BillData = billService.GetBillsByBillNo(id, User_id);
+                if (BillData == null)
+                {
+                    return RedirectToAction("Index", "Main");
+                }
 
                 return View(BillData);
             }
             catch (Exception ex)
             {
-                return View();
+                return RedirectToAction("ErrorPage", "Error");
             }
         }
-        
+
         [HttpPost]
         public ActionResult UpdateBill(BillResponseDto billResponseDto)
         {
@@ -158,14 +168,19 @@ namespace EASYBL.web.Controllers
                 var Id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToRoute(new { action = "BillGetById", controller = "Bill", id = 1 });
+                    return RedirectToAction("ErrorPage", "Error");
                 }
                 var billObjectResponse = billService.UpdateBills(billResponseDto, Id);
-                return RedirectToRoute(new { action = "BillGetById", controller = "Bill", id = 1 });
+                if (billObjectResponse == null)
+                {
+                    return RedirectToAction("Index", "Main");
+
+                }
+                return RedirectToRoute(new { action = "BillGetById", controller = "Bill", id = billResponseDto.BillObject.BillNo });
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ErrorPage", "Error");
 
             }
 
@@ -181,7 +196,7 @@ namespace EASYBL.web.Controllers
                 var User_id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ErrorPage", "Error");
                 }
                 billService.DeleteBill(id, User_id);
 
@@ -189,21 +204,72 @@ namespace EASYBL.web.Controllers
             }
             catch (Exception ex)
             {
-                return View();
+                return RedirectToAction("ErrorPage", "Error");
             }
         }
 
-
-        [HttpPost]
-        public ActionResult Filter(DateTime dateTime,string name,int billNo)
+        public ActionResult Filter()
         {
             try
             {
+                var a = User.Identity.Name;
+                var User_id = Int32.Parse(a);
+                if (string.IsNullOrEmpty(a))
+                {
+                    return RedirectToAction("ErrorPage", "Error");
+                }
+
                 return View();
             }
             catch (Exception ex)
             {
+                return RedirectToAction("ErrorPage", "Error");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Filter(FilterObject filterObject)
+        {
+            try
+            {
+                var a = User.Identity.Name;
+                var User_id = Int32.Parse(a);
+                if (string.IsNullOrEmpty(a))
+                {
+                    return RedirectToAction("ErrorPage", "Error");
+                }
+                var ObjectResponse = billService.FilterData(filterObject, User_id);
+                if (ObjectResponse != null)
+                {
+                    return View(ObjectResponse);
+                }
                 return View();
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("ErrorPage", "Error");
+            }
+        }
+
+        [HttpGet]
+        public JsonResult MonthReview()
+        {
+            try
+            {
+                var a = User.Identity.Name;
+                var User_id = Int32.Parse(a);
+                if (string.IsNullOrEmpty(a))
+                {
+                    return Json("Some Error Occured", JsonRequestBehavior.AllowGet);
+                }
+                var response = billService.MonthReview(User_id);
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                return Json("Some Error Occured", JsonRequestBehavior.AllowGet);
             }
         }
     }

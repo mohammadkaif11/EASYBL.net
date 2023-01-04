@@ -75,7 +75,6 @@ function addItem() {
 
 //DeleteCell.................
 function DeleteCell() {
-    console.log(this.id);
     if (this.id == undefined || this.id == null) {
         return;
     }
@@ -188,7 +187,6 @@ function SaveItem() {
                        </div >`
         }
     });
-    console.log(payload)
 }
 
 //Print Function

@@ -18,6 +18,8 @@ namespace EASYBL.data.IReposistoryBase
         void DeleteRange(IEnumerable<T> obj);    
         IEnumerable<T> FindByCondition(Expression<Func<T, bool>> expression);
 
+        void Save();
+
     }
 
 }

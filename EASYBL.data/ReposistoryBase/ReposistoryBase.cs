@@ -4,10 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Unity.Storage.RegistrationSet;
 
 namespace EASYBL.data.ReposistoryBase
 {
@@ -46,10 +48,9 @@ namespace EASYBL.data.ReposistoryBase
 
         public void Update(T obj)
         {
-            table.Attach(obj);
+             table.Attach(obj);
             _context.Entry(obj).State = EntityState.Modified;
             _context.SaveChanges();
-
         }
 
         public void Delete(int id)
@@ -71,14 +72,14 @@ namespace EASYBL.data.ReposistoryBase
 
         public void InsertRange(IEnumerable<T> obj)
         {
-           table.AddRange(obj);
+            table.AddRange(obj);
             _context.SaveChanges();
         }
 
         public void DeleteRange(IEnumerable<T> obj)
         {
             table.RemoveRange(obj);
-            _context.SaveChanges(); 
+            _context.SaveChanges();
         }
     }
 }

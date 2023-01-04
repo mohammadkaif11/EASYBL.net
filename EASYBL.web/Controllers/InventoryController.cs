@@ -17,8 +17,6 @@ namespace EASYBL.web.Controllers
         {
             this.inventoryService = inventoryService;
         }
-
-
         // GET: Inventory
         public ActionResult Index()
         {
@@ -28,15 +26,15 @@ namespace EASYBL.web.Controllers
                 var Id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ErrorPage", "Error");
                 }
                 var inventoryList = inventoryService.Get(Id);
-                return View(inventoryList);
 
+                return View(inventoryList);
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ErrorPage", "Error");
             }
         }
 
@@ -49,14 +47,14 @@ namespace EASYBL.web.Controllers
                 var Id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ErrorPage", "Error");
                 }
                 var inventoryList = inventoryService.InventoryGetById(id, Id);
                 return View(inventoryList);
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ErrorPage", "Error");
             }
         }
 
@@ -69,14 +67,13 @@ namespace EASYBL.web.Controllers
                 var Id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ErrorPage", "Error");
                 }
                 return View();
-
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ErrorPage", "Error");
             }
         }
 
@@ -90,7 +87,7 @@ namespace EASYBL.web.Controllers
                 var Id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ErrorPage", "Error");
                 }
                 inventoryDto.UserId = Id;
                 inventoryService.Add(inventoryDto);
@@ -98,27 +95,31 @@ namespace EASYBL.web.Controllers
             }
             catch
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ErrorPage", "Error");
             }
         }
 
         // GET: Inventory/Edit/5
         public ActionResult Edit(int id)
         {
-             try
+            try
             {
                 var a = User.Identity.Name;
                 var Id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ErrorPage", "Error");
                 }
                 var inventoryList = inventoryService.InventoryGetById(id, Id);
+                if (inventoryList == null)
+                {
+                    return RedirectToAction("Index");
+                }
                 return View(inventoryList);
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ErrorPage", "Error");
             }
         }
 
@@ -132,14 +133,14 @@ namespace EASYBL.web.Controllers
                 var Id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ErrorPage", "Error");
                 }
                 var inventoryList = inventoryService.Update(inventoryDto, Id);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ErrorPage", "Error");
             }
         }
 
@@ -152,14 +153,18 @@ namespace EASYBL.web.Controllers
                 var Id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ErrorPage", "Error");
                 }
                 var inventoryList = inventoryService.InventoryGetById(id, Id);
+                if (inventoryList == null)
+                {
+                    return RedirectToAction("Index");
+                }
                 return View(inventoryList);
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ErrorPage", "Error");
             }
         }
 
@@ -173,7 +178,7 @@ namespace EASYBL.web.Controllers
                 var Id = Int32.Parse(a);
                 if (string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ErrorPage", "Error");
                 }
 
                 var inventoryList = inventoryService.Delete(inventoryDto.Id, Id);
@@ -181,7 +186,7 @@ namespace EASYBL.web.Controllers
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ErrorPage", "Error");
             }
         }
     }

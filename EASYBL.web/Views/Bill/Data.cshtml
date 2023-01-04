@@ -4,70 +4,67 @@
     ViewBag.Title = "Bill/Data";
     Layout = "~/Views/Shared/_BillCommonLayout.cshtml";
 }
-@*filterForm*@
-<nav class="navbar bg-light mx-2 my-2">
-    <form class="container-fluid  border-5 p-2" action="/Bill/Filter" method="post">
-        <div class="input-group">
-            <input type="date" name="datetime" class="form-control mx-1 " placeholder="Date" >
-            <input type="text" name="name" class="form-control mx-1" placeholder="Name" >
-            <input type="number" name="biilNo" class="form-control mx-1" placeholder="BillNo" >
-            <button class="btn btn-dark mx-1">Submit</button>
-        </div>
-    </form>
-</nav>
 @*showingData*@
-<div class="Outter_container">
-    <table class="table border m-3">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Date</th>
-                <th scope="col">Name</th>
-                <th scope="col">Phone</th>
-                <th scope="col">TotalAmount</th>
-                <th scope="col">TotalQuantity</th>
-                <th scope="col">Details</th>
-                <th scope="col">Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+@if (Model != null)
+{
+    <div class="Outter_container">
+        <table class="table border m-3">
+            <thead>
                 <tr>
-                    <th scope="row">@item.BillObject.BillNo</th>
-                    <td>@item.BillObject.RecivedDate.Date</td>
-                    <td>@item.BillObject.CustomerName</td>
-                    <td>@item.BillObject.CustomerPhoneNumber</td>
-                    <td>@item.BillObject.Amount</td>
-                    <td>@item.BillObject.TotalQuantity</td>
-                    <td>
-                        <a href="/getById/@item.BillObject.BillNo" class="btn btn-dark">Details</a>
-                    </td>
-                    <td>
-                        <a href="/Delete/@item.BillObject.BillNo" class="btn btn-dark">Delete</a>
-                    </td>
+                    <th scope="col">Id</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">TotalAmount</th>
+                    <th scope="col">TotalQuantity</th>
+                    <th scope="col">Details</th>
+                    <th scope="col">Delete</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
-<div class="container" style="display:flex;justify-content:center;text-align:center">
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item">
-                <button class="page-link" href="#" aria-label="Previous" onclick="DecrementValue()">
-                    <span aria-hidden="true">&laquo;</span>
-                </button>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <button class="page-link" href="#" aria-label="Next" onclick="IncreamentPage()">
-                    <span aria-hidden="true">&raquo;</span>
-                </button>
-            </li>
-        </ul>
-    </nav>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">@item.BillObject.BillNo</th>
+                        <td>@item.BillObject.RecivedDate.Date</td>
+                        <td>@item.BillObject.CustomerName</td>
+                        <td>@item.BillObject.CustomerPhoneNumber</td>
+                        <td>@item.BillObject.Amount</td>
+                        <td>@item.BillObject.TotalQuantity</td>
+                        <td>
+                            <a href="/getById/@item.BillObject.BillNo" class="btn btn-dark">Details</a>
+                        </td>
+                        <td>
+                            <a href="/Delete/@item.BillObject.BillNo" class="btn btn-dark">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="container" style="display:flex;justify-content:center;text-align:center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <button class="page-link" href="#" aria-label="Previous" onclick="DecrementValue()">
+                        <span aria-hidden="true">&laquo;</span>
+                    </button>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <button class="page-link" href="#" aria-label="Next" onclick="IncreamentPage()">
+                        <span aria-hidden="true">&raquo;</span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+}
+else
+{
+    <div class="container" style="text-align:center;color:red"><h1>Refresh the page</h1></div>
+}
+
 

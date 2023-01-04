@@ -24,65 +24,81 @@ namespace EASYBL.bussiness.BillService
 
         public void CreateBill(Bills BillDto, List<Items> itemDto, int id)
         {
-            var User_data = userService.GetById(id);
-            decimal totalPrice = 0;
-            var totalQuantity = 0;
-            BillDto.BillNo = User_data.CurrentBillNo;
-            BillDto.UserId = id;
-
-            foreach (var item in itemDto)
+            if (BillDto != null || itemDto != null)
             {
-                totalPrice += item.ItemPrice * item.ItemQuantity;
-                totalQuantity += item.ItemQuantity;
-                item.BillNo = User_data.CurrentBillNo;
-                item.UserId = id;
+
+                var User_data = userService.GetById(id);
+                decimal totalPrice = 0;
+                var totalQuantity = 0;
+                BillDto.BillNo = User_data.CurrentBillNo;
+                BillDto.UserId = id;
+
+                if (itemDto != null)
+                {
+                    foreach (var item in itemDto)
+                    {
+                        totalPrice += item.ItemPrice * item.ItemQuantity;
+                        totalQuantity += item.ItemQuantity;
+                        item.BillNo = User_data.CurrentBillNo;
+                        item.UserId = id;
+                    }
+                }
+                BillDto.DeliveryDate = DateTime.Now.Date;
+                BillDto.RecivedDate = DateTime.Now.Date;
+                //Insert Items
+                BillDto.TotalQuantity = totalQuantity;
+                BillDto.Amount = totalPrice;
+
+                //Insert BillData
+                billRepo.Insert(BillDto);
+                if (itemDto != null)
+                {
+                    itemsRepo.InsertRange(itemDto);
+                }
+
+                //Update BillNo
+                userService.UpdateBillNo(id);
             }
-            BillDto.DeliveryDate = DateTime.Now.Date;
-            BillDto.RecivedDate = DateTime.Now.Date;
-            //Insert Items
-            BillDto.TotalQuantity = totalQuantity;
-            BillDto.Amount = totalPrice;
-
-            //Insert BillData
-            billRepo.Insert(BillDto);
-            itemsRepo.InsertRange(itemDto);
-
-            //Update BillNo
-            userService.UpdateBillNo(id);
         }
 
         public void DeleteBill(int BillNo, int UserId)
         {
             var BillObject = billRepo.FindByCondition(x => x.BillNo == BillNo && x.UserId == UserId).FirstOrDefault();
             var Items = itemsRepo.FindByCondition(x => x.UserId == UserId && x.BillNo == BillNo).ToList();
-            billRepo.Delete(BillObject.Id);
-            itemsRepo.DeleteRange(Items);
+            if (BillObject != null)
+            {
+                billRepo.Delete(BillObject.Id);
+            }
+            if (Items != null)
+            {
+                itemsRepo.DeleteRange(Items);
+            }
         }
 
-
-        public IQueryable<BillResponseDto> FilterData(DateTime dateTime, string name, int billNo,int userId)
+        public IQueryable<BillResponseDto> FilterData(FilterObject filterObject, int userId)
         {
             List<BillResponseDto> result = new List<BillResponseDto>();
-            var Bills =billRepo.FindByCondition(x=>x.UserId==userId).ToList();
-            var items=itemsRepo.FindByCondition(x=>x.UserId==userId).ToList();
+            var Bills = billRepo.FindByCondition(x => x.UserId == userId).ToList();
+            var items = itemsRepo.FindByCondition(x => x.UserId == userId).ToList();
 
-            if(dateTime!=null)
+            if (filterObject.date != null)
             {
-               Bills=  Bills.Where(x=>x.RecivedDate.Date.Equals(dateTime.Date)).ToList();
+                Bills = Bills.Where(x => x.RecivedDate.Date.Equals(filterObject.date)).ToList();
             }
-            if(name!=null)
+            if (filterObject.name != null)
             {
-                Bills = Bills.Where(x => x.CustomerName.Equals(name)).ToList();
+                Bills = Bills.Where(x => x.CustomerName.Equals(filterObject.name)).ToList();
             }
-            if (billNo!=null)
+            if (filterObject.billNo != null)
             {
-                Bills = Bills.Where(x => x.BillNo.Equals(billNo)).ToList();
+                Bills = Bills.Where(x => x.BillNo.Equals(filterObject.billNo)).ToList();
             }
+
             foreach (var bill in Bills)
             {
                 BillResponseDto obj = new BillResponseDto();
                 var item = items.Where(x => x.BillNo == bill.BillNo).ToList();
-                if (item.Count > 0)
+                if (item != null)
                 {
                     decimal totalPrice = 0;
                     var TotalItem = item.Sum(x => x.ItemQuantity);
@@ -108,7 +124,7 @@ namespace EASYBL.bussiness.BillService
         {
             List<BillResponseDto> result = new List<BillResponseDto>();
 
-            var Bills = billRepo.FindByCondition(x => x.UserId == UserId).ToList().OrderByDescending(x => x.RecivedDate).ThenBy(x => x.Id);
+            var Bills = billRepo.FindByCondition(x => x.UserId == UserId).ToList().OrderByDescending(x => x.RecivedDate).ThenByDescending(x => x.Id);
             var Items = itemsRepo.FindByCondition(x => x.UserId == UserId).ToList();
             var TotaPage = Bills.Count() / 2;
             if (PageNo <= 0)
@@ -159,7 +175,6 @@ namespace EASYBL.bussiness.BillService
             var Bill = billRepo.FindByCondition(x => x.BillNo == BillNo && x.UserId == UserId).FirstOrDefault();
             var Items = itemsRepo.FindByCondition(x => x.BillNo == BillNo && x.UserId == UserId).ToList();
 
-
             decimal totalPrice = 0;
             var TotalItem = Items.Sum(x => x.ItemQuantity);
             foreach (var data in Items)
@@ -182,18 +197,64 @@ namespace EASYBL.bussiness.BillService
             var Bill = billRepo.FindByCondition(x => x.Id == Id && x.UserId == UserId).FirstOrDefault();
             var Items = itemsRepo.FindByCondition(x => x.BillNo == Bill.BillNo && x.UserId == UserId).ToList();
 
-
+            var TotalItem = 0;
             decimal totalPrice = 0;
-            var TotalItem = Items.Sum(x => x.ItemQuantity);
-            foreach (var data in Items)
+            if (Items != null)
             {
-                totalPrice += data.ItemQuantity * data.ItemPrice;
+                TotalItem = Items.Sum(x => x.ItemQuantity);
+                foreach (var data in Items)
+                {
+                    totalPrice += data.ItemQuantity * data.ItemPrice;
+                }
             }
 
-            Bill.TotalQuantity = TotalItem;
-            Bill.Amount = totalPrice;
-            result.BillObject = Bill;
-            result.ItemObject = Items;
+            if (Bill != null)
+            {
+                Bill.TotalQuantity = TotalItem;
+                Bill.Amount = totalPrice;
+                result.BillObject = Bill;
+                result.ItemObject = Items;
+
+            }
+
+            return result;
+        }
+
+        //algorithm for data analysis
+        public decimal[] MonthReview(int UserId)
+        {
+            var AllBills=billRepo.FindByCondition(x=>x.UserId== UserId).ToList();
+            var Month = DateTime.Now.Month;
+            var SizeofArray = DateTime.Now.Day;
+            var bills = AllBills.Where(x => x.RecivedDate.Month == Month).OrderBy(x => x.RecivedDate.Date).ToList();
+            decimal[] result = new decimal[SizeofArray+1];
+            if (bills.Count > 0)
+            {
+                var currentdate = bills[0].RecivedDate.Date;
+                decimal amount = 0;
+                foreach (var item in bills)
+                {
+                    if (currentdate.Date != item.RecivedDate.Date)
+                    {
+                        int index = currentdate.Date.Day;
+                        result[index] = amount;
+                        amount = 0;
+                        amount += item.Amount;
+                        currentdate = item.RecivedDate.Date;
+                    }
+                    else
+                    {
+                        amount += item.Amount;
+                        currentdate=item.RecivedDate.Date;  
+                    }
+                }
+                if (amount != 0)
+                {
+                    int index = currentdate.Date.Day;
+                    result[index] = amount;
+                }
+            }
+
 
             return result;
         }
@@ -203,23 +264,30 @@ namespace EASYBL.bussiness.BillService
             var BillObject = billRepo.FindByCondition(x => x.Id == billResponseDto.BillObject.Id && x.UserId == UserId && x.BillNo == billResponseDto.BillObject.BillNo).FirstOrDefault();
             var items = itemsRepo.FindByCondition(x => x.UserId == UserId && x.BillNo == BillObject.BillNo).ToList();
 
-            //deleteRange
-            itemsRepo.DeleteRange(items);
+            if (items != null)
+            {
+                //deleteRange
+                itemsRepo.DeleteRange(items);
+            }
 
             decimal totalPrice = 0;
             var totalQuantity = 0;
 
-            foreach (var item in billResponseDto.ItemObject)
+
+            if (items != null)
             {
-                totalPrice += item.ItemPrice * item.ItemQuantity;
-                totalQuantity += item.ItemQuantity;
-                item.BillNo = BillObject.BillNo;
-                item.UserId = UserId;
+                foreach (var item in billResponseDto.ItemObject)
+                {
+                    totalPrice += item.ItemPrice * item.ItemQuantity;
+                    totalQuantity += item.ItemQuantity;
+                    item.BillNo = BillObject.BillNo;
+                    item.UserId = UserId;
+                }
+                BillObject.CustomerName = billResponseDto.BillObject.CustomerName;
+                BillObject.CustomerPhoneNumber = billResponseDto.BillObject.CustomerPhoneNumber;
+                BillObject.DeliveryDate = billResponseDto.BillObject.RecivedDate;
+                BillObject.RecivedDate = billResponseDto.BillObject.RecivedDate;
             }
-            BillObject.CustomerName = billResponseDto.BillObject.CustomerName;
-            BillObject.CustomerPhoneNumber = BillObject.CustomerPhoneNumber;
-            BillObject.DeliveryDate = DateTime.Now.Date;
-            BillObject.RecivedDate = DateTime.Now.Date;
 
             //Insert Items
             BillObject.TotalQuantity = totalQuantity;
@@ -227,11 +295,13 @@ namespace EASYBL.bussiness.BillService
 
             //Insert BillData
             billRepo.Update(BillObject);
-            itemsRepo.InsertRange(billResponseDto.ItemObject);
+            if (billResponseDto.ItemObject.Count > 0)
+            {
+                itemsRepo.InsertRange(billResponseDto.ItemObject);
+            }
 
             return billResponseDto;
         }
 
-     
     }
 }

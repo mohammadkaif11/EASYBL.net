@@ -33,7 +33,7 @@ namespace EASYBL.bussiness.UserService
 
         public ShopkeeperUsers IsRegistered(string Password, string Email)
         {
-           var users=reposistoryBase.FindByCondition(x=>x.Password== Password && x.Email==Email).FirstOrDefault();
+           var users=reposistoryBase.FindByCondition(x=>x.Password== Password || x.Email==Email).FirstOrDefault();
             if(users!=null)
             {
                 return users;

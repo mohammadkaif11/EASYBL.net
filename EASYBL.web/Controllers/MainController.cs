@@ -17,13 +17,13 @@ namespace EASYBL.web.Controllers
                 var a = User.Identity.Name;
                 if(string.IsNullOrEmpty(a))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ErrorPage", "Error");
                 }
                 return View();
             }
             catch(Exception ex) {
                
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ErrorPage", "Error");
             }
         }
     }

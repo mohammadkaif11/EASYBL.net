@@ -22,7 +22,8 @@ namespace EASYBL.bussiness.BillService
 
         void DeleteBill(int BillNo,int UserId);
 
-        IQueryable<BillResponseDto> FilterData(DateTime dateTime,string name,int billNo,int userId);
+        IQueryable<BillResponseDto> FilterData(FilterObject filterObject,int userId);
 
+        decimal[] MonthReview(int UserId);
     }
 }
