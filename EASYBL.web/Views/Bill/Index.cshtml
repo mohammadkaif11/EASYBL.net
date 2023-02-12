@@ -13,8 +13,12 @@
             <input type="text" name="name" class="form-control" id="c-name" aria-describedby="nameHelep">
         </div>
         <div class="mb-3">
-            <label for="phonenumber" class="form-label">PhoneNumber</label>
+            <label for="phonenumber" class="form-label">Phonenumber/Email</label>
             <input type="text" class="form-control" id="c-phoneNumber" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <input type="checkbox" id="isEmail" name="isEmail" value="true">
+            <label for="isEmail">Email</label>
         </div>
         <button type="submit" class="btn btn-dark my-2" onclick="addCustomerDetails()">Add Customer Details</button>
         <div class="mb-3">
@@ -29,7 +33,7 @@
                         <option value="@item.Name @item.Price">@item.Name</option>
                     }
                 }
-                
+
             </select>
         </div>
         <div class="mb-3">

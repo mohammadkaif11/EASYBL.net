@@ -128,6 +128,7 @@ function myFunction(e) {
 //Add Customer Details
 function addCustomerDetails() {
     let today = new Date().toLocaleDateString()
+
     var name = document.getElementById('c-name');
     var phone = document.getElementById('c-phoneNumber');
 
@@ -142,6 +143,7 @@ function addCustomerDetails() {
 
 //SaveItem...........
 function SaveItem() {
+    var isEmail = document.getElementById('isEmail');
     var responsediv = document.getElementById('response-div');
     var Sucmsg = "Entry Save SuccessFully";
     var Errormsg = "Failed";
@@ -164,6 +166,7 @@ function SaveItem() {
     var payload = {
         "billObjectDto": billObjectDto,
         "listObjectDto": Obj,
+        "isEmail": isEmail.checked ? true : false
     }
     $.ajax({
         type: "POST",
